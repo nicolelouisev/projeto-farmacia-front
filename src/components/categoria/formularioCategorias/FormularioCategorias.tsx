@@ -9,14 +9,10 @@ function FormularioCategorias() {
     let navigate = useNavigate();
 
     const {id} = useParams<{id: string}>();
-    
-    const token = 0;
 
     async function buscarPorId(id: string) {
         await buscar(`/categorias/${id}`, setCategorias, {
-            headers: {
-                Authorization: token,
-            },
+            headers: {},
         });
     }
 
@@ -41,34 +37,30 @@ function FormularioCategorias() {
         if (id !== undefined) {
             try {
                 await atualizar(`/categorias`, categorias, setCategorias, {
-                    headers: {
-                        Authorization: token,
-                    },
+                    headers: {},
                 });
 
-                alert("Tema atualizado com sucesso");
+                alert("Categoria atualizado com sucesso");
                 retornar();
             } catch (error: any) {
                 if (error.toString().includes("403")) {
                     alert("O token expirou, favor logar novamente");
                 } else {
-                    alert("Erro ao atualizar o Tema");
+                    alert("Erro ao atualizar o Categoria");
                 }
             }
         } else {
             try {
                 await cadastrar(`/categorias`, categorias, setCategorias, {
-                    headers: {
-                        Authorization: token,
-                    },
+                    headers: {},
                 });
 
-                alert("Tema cadastrado com sucesso");
+                alert("Categoria cadastrado com sucesso");
             } catch (error: any) {
                 if (error.toString().includes("403")) {
                     alert("O token expirou, favor logar novamente");
                 } else {
-                    alert("Erro ao atualizar o Tema");
+                    alert("Erro ao cadastrado o Categoria");
                 }
             }
         }
@@ -82,11 +74,20 @@ function FormularioCategorias() {
 
     return (
         <div className="container flex flex-col items-center justify-center mx-auto">
-            <h1 className="text-4xl text-center my-8">{id === undefined ? "Cadastre um novo tema" : "Editar tema"}</h1>
+            <h1 className="text-4xl text-center my-8">{id === undefined ? "Cadastre um novo categoria" : "Editar categoria"}</h1>
 
             <form className="w-1/2 flex flex-col gap-4" onSubmit={gerarNovaCategoria}>
                 <div className="flex flex-col gap-2">
-                    <label htmlFor="descricao">Descrição do tema</label>
+                    <label htmlFor="descricao">Nome da categoria</label>
+                    <input
+                        type="text"
+                        placeholder="Nome"
+                        name="nome"
+                        className="border-2 border-slate-700 rounded p-2"
+                        value={categorias.nome}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+                    />
+                    <label htmlFor="descricao">Descrição da categoria</label>
                     <input
                         type="text"
                         placeholder="Descrição"
@@ -96,7 +97,7 @@ function FormularioCategorias() {
                         onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
                     />
                 </div>
-                <button className="rounded text-slate-100 bg-teal-700 hover:bg-teal-950 w-1/2 py-2 mx-auto block" type="submit">
+                <button className="rounded text-slate-100 bg-indigo-400 hover:bg-indigo-800 w-1/2 py-2 mx-auto block" type="submit">
                     {id === undefined ? "Cadastrar" : "Editar"}
                 </button>
             </form>
@@ -105,4 +106,3 @@ function FormularioCategorias() {
 }
 
 export default FormularioCategorias;
-
